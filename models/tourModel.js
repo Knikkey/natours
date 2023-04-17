@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const validator = require('validator');
+//const validator = require('validator');
+//const User = require('./userModel');
 
 const requiredMsg = (el) => `A tour must have a(n) ${el}`;
 
@@ -82,6 +83,30 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    startLocation: {
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
+    guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   },
   {
     toJSON: { virtuals: true },
@@ -111,11 +136,27 @@ tourSchema.post('save', function (doc, next) {
   next();
 });
 
+//embedding tour guides to tour documents
+// tourSchema.pre('save', async function (next) {
+//   const ids = this.guides;
+//   this.guides = await User.find({ _id: { $in: ids } });
+//   next();
+// });
+
 //query middleware
 //middleware that runs a query; this points to a query, not a document
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
   this.start = Date.now();
+  next();
+});
+
+//populate guide field in tour document
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
   next();
 });
 
