@@ -1,6 +1,6 @@
 const Review = require('./../models/reviewModel');
 const catchAsync = require('../utils/catchAsync');
-const { deleteOne, updateOne, createOne } = require('./handlerFactory');
+const { deleteOne, updateOne, createOne, getOne } = require('./handlerFactory');
 
 exports.getAllReviews = catchAsync(async function (req, res, next) {
   let filter;
@@ -25,3 +25,4 @@ exports.setTourUserIds = (req, res, next) => {
 exports.postReview = createOne(Review);
 exports.deleteReview = deleteOne(Review);
 exports.updateReview = updateOne(Review);
+exports.getReview = getOne(Review);
