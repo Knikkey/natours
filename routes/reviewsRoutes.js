@@ -7,11 +7,14 @@ const {
 const {
   postReview,
   getAllReviews,
+  deleteReview,
 } = require('../controllers/reviewsController');
 
 router
   .route('/')
   .get(getAllReviews)
   .post(protect, restrictTo('user'), postReview);
+
+router.route('/:id').delete(deleteReview);
 
 module.exports = router;
