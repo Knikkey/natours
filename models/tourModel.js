@@ -120,6 +120,13 @@ tourSchema.virtual('durationWeeks').get(function () {
   return (this.duration / 7).toFixed(1);
 });
 
+//virtual populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
+
 //pre-middleware (document)
 //runs before the specified step (save or create)
 //this -> document
