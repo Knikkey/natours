@@ -1,7 +1,7 @@
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
-const { deleteOne, updateOne, getOne } = require('./handlerFactory');
+const { deleteOne, updateOne, getOne, getAll } = require('./handlerFactory');
 
 const filterObj = (obj, ...fields) => {
   let newObj = {};
@@ -40,20 +40,6 @@ exports.deactivateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAllUsers = catchAsync(async (req, res) => {
-  const users = await User.find();
-
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users,
-    },
-  });
-});
-
-exports.getUser = getOne(User);
-
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
@@ -62,6 +48,7 @@ exports.createUser = (req, res) => {
 };
 
 //DO NOT UPDATE PASSWORDS WITH THIS
+exports.getAllUsers = getAll(User);
+exports.getUser = getOne(User);
 exports.updateUser = updateOne(User);
-
 exports.deleteUser = deleteOne(User);
