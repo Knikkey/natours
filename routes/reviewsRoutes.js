@@ -13,11 +13,17 @@ const {
   getReview,
 } = require('../controllers/reviewsController');
 
+router.use(protect);
+
 router
   .route('/')
   .get(getAllReviews)
-  .post(protect, restrictTo('user'), setTourUserIds, postReview);
+  .post(restrictTo('user'), setTourUserIds, postReview);
 
-router.route('/:id').get(getReview).delete(deleteReview).patch(updateReview);
+router
+  .route('/:id')
+  .get(getReview)
+  .delete(restrictTo('user', 'admin'), deleteReview)
+  .patch(restrictTo('user', 'admin'), updateReview);
 
 module.exports = router;

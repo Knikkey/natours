@@ -114,6 +114,10 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+//create index for mongoDB
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+
 //virtual properties
 //properties that won't be saved to the database
 tourSchema.virtual('durationWeeks').get(function () {
