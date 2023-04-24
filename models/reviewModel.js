@@ -70,5 +70,11 @@ reviewSchema.post('save', function () {
   this.constructor.calcAverageRatings(this.tour);
 });
 
+//update when review is edited/deleted
+reviewSchema.post(/^findOneAnd/, async function (doc, next) {
+  await doc.constructor.calcAverageRatings(doc.tour);
+  next();
+});
+
 const Review = mongoose.model('Review', reviewSchema);
 module.exports = Review;
