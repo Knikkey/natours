@@ -118,6 +118,7 @@ const tourSchema = new mongoose.Schema(
 //create index for mongoDB
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: '2dsphere' });
 
 //virtual properties
 //properties that won't be saved to the database
@@ -179,10 +180,10 @@ tourSchema.post(/^find/, function (docs, next) {
 
 //aggregation middleware
 //this -> aggregation object
-tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  next();
-});
+// tourSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   next();
+// });
 
 const Tour = mongoose.model('Tour', tourSchema);
 
