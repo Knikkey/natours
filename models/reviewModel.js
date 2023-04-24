@@ -32,6 +32,9 @@ reviewSchema = new mongoose.Schema(
   }
 );
 
+//prevent users from posting more than 1 review on a single tour
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 //middleware
 reviewSchema.pre(/^find/, function (next) {
   // this.populate({
